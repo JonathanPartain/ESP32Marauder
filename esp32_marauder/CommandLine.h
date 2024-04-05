@@ -29,7 +29,8 @@ extern WiFiScan wifi_scan_obj;
   extern SDInterface sd_obj;
 #endif
 extern Settings settings_obj;
-extern LedInterface led_obj;
+//extern LedInterface led_obj;
+extern LedInterface flipper_led;
 extern LinkedList<AccessPoint>* access_points;
 extern LinkedList<ssid>* ssids;
 extern LinkedList<Station>* stations;

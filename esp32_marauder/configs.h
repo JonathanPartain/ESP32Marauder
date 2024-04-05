@@ -8,13 +8,13 @@
 
   //// BOARD TARGETS
   //#define MARAUDER_M5STICKC
-  #define MARAUDER_MINI
+  //#define MARAUDER_MINI
   //#define MARAUDER_V4
   //#define MARAUDER_V6
   //#define MARAUDER_V6_1
   //#define MARAUDER_KIT
   //#define GENERIC_ESP32
-  //#define MARAUDER_FLIPPER
+  #define MARAUDER_FLIPPER
   //#define ESP32_LDDB
   //#define MARAUDER_DEV_BOARD_PRO
   //#define XIAO_ESP32_S3
@@ -152,15 +152,15 @@
   #endif
 
   #ifdef MARAUDER_FLIPPER
-    //#define FLIPPER_ZERO_HAT
+    #define FLIPPER_ZERO_HAT
     //#define HAS_BATTERY
     //#define HAS_BT
     //#define HAS_BUTTONS
-    //#define HAS_NEOPIXEL_LED
+    #define HAS_NEOPIXEL_LED
     //#define HAS_PWR_MGMT
     //#define HAS_SCREEN
-    #define HAS_GPS
-    #define HAS_SD
+    //#define HAS_GPS
+    //#define HAS_SD
     #define USE_SD
     //#define HAS_TEMP_SENSOR
   #endif
@@ -848,7 +848,7 @@
     #endif
 
     #ifdef MARAUDER_FLIPPER
-      #define SD_CS 10
+      #define SD_CS 5 // WAS 10
     #endif
 
     #ifdef ESP32_LDDB
@@ -928,6 +928,8 @@
       #define PIN 16
     #elif defined(MARAUDER_REV_FEATHER)
       #define PIN 33
+    #elif defined(MARAUDER_FLIPPER)
+      #define PIN 39
     #else
       #define PIN 25
     #endif

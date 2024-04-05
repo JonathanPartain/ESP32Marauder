@@ -1,20 +1,27 @@
 #include "LedInterface.h"
-
+extern HardwareSerial MySerial;
 LedInterface::LedInterface() {
 
 }
 
 void LedInterface::RunSetup() {
-  //Serial.println("Setting neopixel to black...");
-  strip.setBrightness(0);
+  MySerial.println("Setting neopixel to black...");
   strip.begin();
+  strip.setBrightness(0);
+  MySerial.println("NPBP2");
   strip.setPixelColor(0, strip.Color(0, 0, 0));
+  MySerial.println("NPBP3");
   strip.show();
+  MySerial.println("NPBP4");
   delay(100);
   strip.setBrightness(50);
+  MySerial.println("NPBP5");
   strip.setPixelColor(0, strip.Color(0, 0, 0));
+  MySerial.println("NPBP6");
   strip.show();
+  MySerial.println("NPBP7");
   this->initTime = millis();
+  MySerial.println("NPBP8");
 }
 
 void LedInterface::main(uint32_t currentTime) {

@@ -4,6 +4,8 @@ Flash Frequency: 80MHz
 Partition Scheme: Minimal SPIFFS
 https://www.online-utility.org/image/convert/to/XBM
 */
+#include <HardwareSerial.h>
+HardwareSerial MySerial(1);
 
 #include "configs.h"
 
@@ -35,7 +37,9 @@ https://www.online-utility.org/image/convert/to/XBM
 #include "Buffer.h"
 
 #ifdef MARAUDER_FLIPPER
-  #include "flipperLED.h"
+  //#include "flipperLED.h"
+  // Uncomment for 
+  #include "LedInterface.h"
 #elif defined(XIAO_ESP32_S3)
   #include "xiaoLED.h"
 #elif defined(MARAUDER_M5STICKC)
@@ -106,7 +110,10 @@ CommandLine cli_obj;
 #endif
 
 #ifdef MARAUDER_FLIPPER
-  flipperLED flipper_led;
+  //flipperLED flipper_led;
+  //LedInterface led_obj;
+  // Uncomment for neopixel
+  LedInterface flipper_led;
 #elif defined(XIAO_ESP32_S3)
   xiaoLED xiao_led;
 #elif defined(MARAUDER_M5STICKC)
@@ -180,9 +187,9 @@ void setup()
     delay(10);
   #endif
 
-  Serial.begin(115200);
+  MySerial.begin(115200, SERIAL_8N1, 16, 5);
 
-  Serial.println("ESP-IDF version is: " + String(esp_get_idf_version()));
+  MySerial.println("ESP-IDF version is: " + String(esp_get_idf_version()));
 
   #ifdef HAS_SCREEN
     display_obj.RunSetup();
@@ -199,7 +206,6 @@ void setup()
       display_obj.drawJpeg("/marauder3L.jpg", 0, 0);
     #endif
   #endif
-
   #ifdef HAS_SCREEN
     #ifndef MARAUDER_MINI
       display_obj.tft.drawCentreString(display_obj.version_number, 120, 250, 2);
@@ -222,7 +228,7 @@ void setup()
 
         backlightOff();
 
-        Serial.println("Headless Mode enabled");
+        MySerial.println("Headless Mode enabled");
       }
     #endif
 
@@ -238,15 +244,12 @@ void setup()
   
     display_obj.tft.println(text_table0[1]);
   #endif
-
   settings_obj.begin();
-
   wifi_scan_obj.RunSetup();
 
   #ifdef HAS_SCREEN
     display_obj.tft.println(F(text_table0[2]));
   #endif
-
   buffer_obj = Buffer();
   #if defined(HAS_SD)
     // Do some SD stuff
@@ -255,7 +258,7 @@ void setup()
         display_obj.tft.println(F(text_table0[3]));
       #endif
     } else {
-      Serial.println(F("SD Card NOT Supported"));
+      MySerial.println(F("SD Card NOT Supported"));
       #ifdef HAS_SCREEN
         display_obj.tft.setTextColor(TFT_RED, TFT_BLACK);
         display_obj.tft.println(F(text_table0[4]));
@@ -263,7 +266,6 @@ void setup()
       #endif
     }
   #endif
-
   evil_portal_obj.setup();
 
   #ifdef HAS_BATTERY
@@ -281,24 +283,28 @@ void setup()
   #ifdef HAS_BATTERY
     battery_obj.battery_level = battery_obj.getBatteryLevel();
   #endif
-
+  MySerial.println("BP 7");
+  delay(500);
   // Do some LED stuff
   #ifdef MARAUDER_FLIPPER
     flipper_led.RunSetup();
+    MySerial.println("led RunSetup done");
   #elif defined(XIAO_ESP32_S3)
     xiao_led.RunSetup();
   #elif defined(MARAUDER_M5STICKC)
     stickc_led.RunSetup();
   #else
-    led_obj.RunSetup();
+    //led_obj.RunSetup();
+    MySerial.println("also else");
   #endif
+  MySerial.println("BP 8");
 
   #ifdef HAS_SCREEN
     display_obj.tft.println(F(text_table0[7]));
 
     delay(500);
   #endif
-
+  MySerial.println("BP 9");
   #ifdef HAS_GPS
     gps_obj.begin();
     #ifdef HAS_SCREEN
@@ -308,7 +314,7 @@ void setup()
         display_obj.tft.println("GPS Module NOT connected");
     #endif
   #endif
-
+  MySerial.println("BP 10");
   #ifdef HAS_SCREEN
     display_obj.tft.println(F(text_table0[8]));
   
@@ -316,13 +322,14 @@ void setup()
   
     delay(2000);
   #endif
-
+  MySerial.println("BP 11");
   #ifdef HAS_SCREEN
     menu_function_obj.RunSetup();
   #endif
-  
-  Serial.println(F("CLI Ready"));
+  MySerial.println("CLI Ready");
+  MySerial.println(F("CLI Ready"));
   cli_obj.RunSetup();
+  
 }
 
 
@@ -392,7 +399,8 @@ void loop()
     //cli_obj.main(currentTime);
   }
   #ifdef MARAUDER_FLIPPER
-    flipper_led.main();
+    flipper_led.main(currentTime);
+    //led_obj.main(currentTime);
   #elif defined(XIAO_ESP32_S3)
     xiao_led.main();
   #elif defined(MARAUDER_M5STICKC)
@@ -416,7 +424,7 @@ void loop()
     #endif
 
     #ifdef MARAUDER_FLIPPER
-      flipper_led.main();
+      //flipper_led.main();
     #elif defined(XIAO_ESP32_S3)
       xiao_led.main();
     #else
