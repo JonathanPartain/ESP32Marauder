@@ -1,5 +1,6 @@
 #include "Buffer.h"
 #include "lang_var.h"
+extern HardwareSerial MySerial(1);
 
 Buffer::Buffer(){
   bufA = (uint8_t*)malloc(BUF_SIZE);
@@ -220,7 +221,7 @@ void Buffer::saveSerial() {
 
   memcpy(it, mark_close, mark_close_len);
   it += mark_close_len;
-  Serial.write(buf, it - buf);
+  MySerial.write(buf, it - buf);
   free(buf);
 }
 

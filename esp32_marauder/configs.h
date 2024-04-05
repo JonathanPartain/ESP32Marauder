@@ -848,6 +848,8 @@
     #endif
 
     #ifdef MARAUDER_FLIPPER
+      // 5 from QT repo
+      // 10 originally
       #define SD_CS 5 // WAS 10
     #endif
 

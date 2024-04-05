@@ -188,6 +188,7 @@ void setup()
   #endif
 
   MySerial.begin(115200, SERIAL_8N1, 16, 5);
+  Serial.begin(115200);
 
   MySerial.println("ESP-IDF version is: " + String(esp_get_idf_version()));
 
@@ -228,7 +229,7 @@ void setup()
 
         backlightOff();
 
-        MySerial.println("Headless Mode enabled");
+        //MySerial.println("Headless Mode enabled");
       }
     #endif
 
@@ -251,14 +252,22 @@ void setup()
     display_obj.tft.println(F(text_table0[2]));
   #endif
   buffer_obj = Buffer();
+  delay(50);
+  MySerial.println("sd block");
+  Serial.println("sd block");
   #if defined(HAS_SD)
     // Do some SD stuff
+    MySerial.println("Start SD init");
+    Serial.println("Start SD init");
     if(sd_obj.initSD()) {
+      MySerial.println("SD Card initiated");
+      Serial.println("SD Card initiated");
       #ifdef HAS_SCREEN
         display_obj.tft.println(F(text_table0[3]));
       #endif
     } else {
-      MySerial.println(F("SD Card NOT Supported"));
+      MySerial.println("SD Card NOT Supported");
+      Serial.println("SD Card NOT Supported");
       #ifdef HAS_SCREEN
         display_obj.tft.setTextColor(TFT_RED, TFT_BLACK);
         display_obj.tft.println(F(text_table0[4]));
@@ -327,7 +336,6 @@ void setup()
     menu_function_obj.RunSetup();
   #endif
   MySerial.println("CLI Ready");
-  MySerial.println(F("CLI Ready"));
   cli_obj.RunSetup();
   
 }
